@@ -17,25 +17,27 @@ import sqlite3
 
 # Retrieve data from database
 def getData():
-	conn=sqlite3.connect('../sensorsData.db')
+	conn=sqlite3.connect('../../sensorsData.db')
 	curs=conn.cursor()
 
-	for row in curs.execute("SELECT * FROM DHT_data ORDER BY timestamp DESC LIMIT 1"):
+	for row in curs.execute("SELECT * FROM BME_data ORDER BY timestamp DESC LIMIT 1"):
 		time = str(row[0])
 		temp = row[1]
 		hum = row[2]
+		pres = row[3]
 	conn.close()
-	return time, temp, hum
+	return time, temp, hum, pres
 
 # main route 
 @app.route("/")
 def index():
 	
-	time, temp, hum = getData()
+	time, temp, hum, pres = getData()
 	templateData = {
 	  'time'	: time,
       'temp'	: temp,
-      'hum'		: hum
+      'hum'		: hum,
+	  'pres'	: pres
 	}
 	return render_template('index.html', **templateData)
 
