@@ -7,19 +7,18 @@
 #  10Jan18
 
 '''
-	RPi Web Server for DHT captured data  
+	RPi Web Server for BME280 captured data  
 '''
 
 from flask import Flask, render_template, request
-app = Flask(__name__)
-
 import sqlite3
+
+app = Flask(__name__)
 
 # Retrieve data from database
 def getData():
 	conn=sqlite3.connect('../../sensorsData.db')
 	curs=conn.cursor()
-
 	for row in curs.execute("SELECT * FROM BME_data ORDER BY timestamp DESC LIMIT 1"):
 		time = str(row[0])
 		temp = row[1]
@@ -31,17 +30,16 @@ def getData():
 # main route 
 @app.route("/")
 def index():
-	
 	time, temp, hum, pres = getData()
 	templateData = {
 	  'time'	: time,
       'temp'	: temp,
       'hum'		: hum,
-	  'pres'	: pres
+	  'pres'	: pres,
 	}
-	return render_template('index.html', **templateData)
+	return render_template('index_gage.html', **templateData)
 
 
 if __name__ == "__main__":
-   app.run(host='0.0.0.0', port=80, debug=False)
+   app.run(host='0.0.0.0', port=80, debug=True)
 
