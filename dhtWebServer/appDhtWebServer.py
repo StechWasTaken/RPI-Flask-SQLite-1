@@ -37,6 +37,17 @@ def index():
       'hum'		: hum,
 	  'pres'	: pres,
 	}
+	return render_template('index.html', **templateData)
+
+@app.route("/gage")
+def gage():
+	time, temp, hum, pres = getData()
+	templateData = {
+	  'time'	: time,
+      'temp'	: temp,
+      'hum'		: hum,
+	  'pres'	: pres,
+	}
 	return render_template('index_gage.html', **templateData)
 
 
